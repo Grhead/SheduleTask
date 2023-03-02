@@ -8,9 +8,33 @@ service SheduleService{
       rpc GetAuditoriumFromDbRPC(Wrap) returns (AuditoriumsFromDb);
       rpc GetTypeFromDbRPC(Wrap) returns (TypesFromDb);
       rpc GetGroupFromDbRPC(Wrap) returns (GroupsFromDb);
+      rpc GetSheduleFromDb(Filter) returns (SheduleArray);
 }
 
 message Wrap{}
+
+message SheduleArray{
+    int32 Subject = 1;
+    int32 Tutor = 2;
+    int32 Auditorium = 3;
+    int32 Type = 4;
+    int32 Group = 5;
+    DateTime Dates = 6;
+    int32 Number = 7;
+}
+message DateTime {
+  int32 year = 1;
+  int32 month = 2;
+  int32 day = 3;
+  int32 hours = 4;
+  int32 minutes = 5;
+  int32 seconds = 6;
+}
+
+message Filter{
+  string Filter = 1;
+  int32 value = 2;
+}
 message SubjectsFromDb{
   repeated StructSubject Subjects = 1;
 }
