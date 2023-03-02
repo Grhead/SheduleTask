@@ -8,7 +8,7 @@ type Classrooms struct {
 	Id        int    `db:"Id"`
 	Classroom string `db:"Classroom"`
 }
-type GroupsName struct {
+type Groups struct {
 	Id        int    `db:"Id"`
 	GroupName string `db:"Group_name"`
 }

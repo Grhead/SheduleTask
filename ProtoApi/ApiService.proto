@@ -3,40 +3,48 @@ package ProtoApi;
 option go_package = "timesheet/ProtoApi/";
 
 service SheduleService{
-
+      rpc GetSubjectFromDbRPC(Wrap) returns (SubjectsFromDb);
+      rpc GetTutorsFromDbRPC(Wrap) returns (TutorsFromDb);
+      rpc GetAuditoriumFromDbRPC(Wrap) returns (AuditoriumsFromDb);
+      rpc GetTypeFromDbRPC(Wrap) returns (TypesFromDb);
+      rpc GetGroupFromDbRPC(Wrap) returns (GroupsFromDb);
 }
 
-//service BLCH_Contract {
-//  rpc AuthRegister(RegData) returns (AuthRegResult);
-//  rpc AuthLogin(AuthData) returns (AuthRegResult);
-//  rpc ChainSize(Wpar) returns (ResponseSize); //размер цепи
-//  rpc Balance(Address) returns (Lanb); //баланс на счете
-//  rpc ViewCandidates(Wpar) returns (stream CandidateList); // вывод кандидатов
-//  rpc Transfer(LowDataChain) returns (IsComplited); // раздача токенов
-//  rpc Vote(LowData) returns (IsComplitedVote); // голосование
-//  rpc TimeBlock(Wpar) returns (stream TimeData); //время до конца голосования
-//  rpc ChainPrint(Wpar) returns (Chain);
-//  rpc ResultsWinner(Wpar) returns (stream CandidateListWithBalance);
-//  rpc SoloWinner(Wpar) returns (CandidateList);
-//}
-//
-//message CandidateListWithBalance {
-//  string candidatePK = 1;
-//  string candidateName = 2;
-//  string balance = 3;
-//}
-//message RegData{
-//  string Passport = 1;
-//  string PublicK = 2;
-//  string Salt = 3;
-//}
-//message AuthData{
-//  string PublicK = 1;
-//  string PrivateK = 2;
-//}
-//message AuthRegResult{
-//  string Distortion = 1;
-//}
-//message Wpar {
-//
-//}
+message Wrap{}
+message SubjectsFromDb{
+  repeated StructSubject Subjects = 1;
+}
+message StructSubject {
+  int32 Id = 1;
+  string SubjectItem = 2;
+}
+message TutorsFromDb{
+  repeated StructTutor Tutors = 1;
+}
+message StructTutor {
+  int32 Id = 1;
+  string SecondName = 2;
+  string FirstName = 3;
+  string LastName = 4;
+}
+message AuditoriumsFromDb{
+  repeated StructClassroom Auditoriums = 1;
+}
+message StructClassroom {
+  int32 Id = 1;
+  string Classroom = 2;
+}
+message TypesFromDb{
+  repeated StructType Types = 1;
+}
+message StructType {
+  int32 Id = 1;
+  string Type = 2;
+}
+message GroupsFromDb{
+  repeated StructGroup Groups = 1;
+}
+message StructGroup {
+  int32 Id = 1;
+  string GroupName = 2;
+}

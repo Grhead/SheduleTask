@@ -46,8 +46,8 @@ func GetTypeFromDb() []Types {
 	return arrayOfTutors
 }
 
-func GetGroupFromDb() []GroupsName {
-	var arrayOfGroups []GroupsName
+func GetGroupFromDb() []Groups {
+	var arrayOfGroups []Groups
 	err := srv.Db.Select(&arrayOfGroups, "select * from Groups_name")
 	if err != sql.ErrNoRows {
 		fmt.Println(err)
