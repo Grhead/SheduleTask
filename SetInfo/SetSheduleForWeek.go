@@ -20,3 +20,10 @@ func CreateObjectOfShedule(NewObjectStruct ObjectPattern) error {
 	_, err := srv.Db.Exec(sqlStr, NewObjectStruct.Subject, NewObjectStruct.Auditorium, NewObjectStruct.Tutor, NewObjectStruct.Type, NewObjectStruct.Group, NewObjectStruct.Dates, NewObjectStruct.Number)
 	return err
 }
+func InsertionToDb(SheduleTable []ObjectPattern) error {
+	var err error
+	for _, i := range SheduleTable {
+		err = CreateObjectOfShedule(i)
+	}
+	return err
+}

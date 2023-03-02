@@ -1,0 +1,42 @@
+syntax = "proto3";
+package ProtoApi;
+option go_package = "timesheet/ProtoApi/";
+
+service SheduleService{
+
+}
+
+//service BLCH_Contract {
+//  rpc AuthRegister(RegData) returns (AuthRegResult);
+//  rpc AuthLogin(AuthData) returns (AuthRegResult);
+//  rpc ChainSize(Wpar) returns (ResponseSize); //размер цепи
+//  rpc Balance(Address) returns (Lanb); //баланс на счете
+//  rpc ViewCandidates(Wpar) returns (stream CandidateList); // вывод кандидатов
+//  rpc Transfer(LowDataChain) returns (IsComplited); // раздача токенов
+//  rpc Vote(LowData) returns (IsComplitedVote); // голосование
+//  rpc TimeBlock(Wpar) returns (stream TimeData); //время до конца голосования
+//  rpc ChainPrint(Wpar) returns (Chain);
+//  rpc ResultsWinner(Wpar) returns (stream CandidateListWithBalance);
+//  rpc SoloWinner(Wpar) returns (CandidateList);
+//}
+//
+//message CandidateListWithBalance {
+//  string candidatePK = 1;
+//  string candidateName = 2;
+//  string balance = 3;
+//}
+//message RegData{
+//  string Passport = 1;
+//  string PublicK = 2;
+//  string Salt = 3;
+//}
+//message AuthData{
+//  string PublicK = 1;
+//  string PrivateK = 2;
+//}
+//message AuthRegResult{
+//  string Distortion = 1;
+//}
+//message Wpar {
+//
+//}
