@@ -17,15 +17,15 @@ func GetTutorsFromDb() []Tutors {
 }
 
 func GetAuditoriumFromDb() []Classrooms {
-	var arrayOfTutors []Classrooms
-	srv.Db.Select(&arrayOfTutors, "select * from Classrooms")
-	return arrayOfTutors
+	var arrayOfAuditoriums []Classrooms
+	srv.Db.Select(&arrayOfAuditoriums, "select * from Classrooms")
+	return arrayOfAuditoriums
 }
 
 func GetTypeFromDb() []Types {
-	var arrayOfTutors []Types
-	srv.Db.Select(&arrayOfTutors, "select * from Types")
-	return arrayOfTutors
+	var arrayOfTypes []Types
+	srv.Db.Select(&arrayOfTypes, "select * from Types")
+	return arrayOfTypes
 }
 
 func GetGroupFromDb() []Groups {

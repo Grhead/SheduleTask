@@ -14,7 +14,7 @@ type Groups struct {
 }
 type Types struct {
 	Id   int32  `db:"Id"`
-	Type string `db:"Types"`
+	Type string `db:"Type"`
 }
 type Tutors struct {
 	Id         int32  `db:"Id"`
