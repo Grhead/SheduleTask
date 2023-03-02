@@ -1,14 +1,24 @@
 package main
 
-import "fmt"
-import getting "timesheet/GetInfo"
-import srv "timesheet/Service"
+import (
+	"fmt"
+	"google.golang.org/grpc"
+	"net"
+	"timesheet/GetInfo"
+	"timesheet/ProtoApi"
+	"timesheet/Server"
+	srv "timesheet/Service"
+)
 
 func main() {
 	srv.InitDB()
-	//q := getting.GetSubjectFromDb()
-	q := getting.GetTutorsFromDb()
-	for _, i := range q {
-		fmt.Println(i.SecondName)
-	}
+	fmt.Println(GetInfo.GetSubjectFromDb())
+	LaunchServer()
+}
+func LaunchServer() {
+	s := grpc.NewServer()
+	srv := &Server.GRPCServer{}
+	ProtoApi.RegisterSheduleServiceServer(s, srv)
+	l, _ := net.Listen("tcp", ":8080")
+	s.Serve(l)
 }
