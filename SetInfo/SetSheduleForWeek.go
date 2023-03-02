@@ -15,15 +15,15 @@ type ObjectPattern struct {
 	Number     int       `db:"Number"`
 }
 
-func CreateObjectOfShedule(NewObjectStruct ObjectPattern) error {
-	sqlStr := "INSERT INTO Timesheet (\"Subject_item\", \"Classroom\", \"Tutor\", \"Type\", \"Group_name\", \"Dates\", \"Number\") VALUES (?, ?, ?, ?, ?, ?, ?)"
+func сreateObjectOfShedule(NewObjectStruct ObjectPattern) error {
+	sqlStr := "INSERT INTO Timesheet (Subject_item, Classroom, Tutor, Type, Group_name, Dates, Number) VALUES (?, ?, ?, ?, ?, ?, ?)"
 	_, err := srv.Db.Exec(sqlStr, NewObjectStruct.Subject, NewObjectStruct.Auditorium, NewObjectStruct.Tutor, NewObjectStruct.Type, NewObjectStruct.Group, NewObjectStruct.Dates, NewObjectStruct.Number)
 	return err
 }
 func InsertionToDb(SheduleTable []ObjectPattern) error {
 	var err error
 	for _, i := range SheduleTable {
-		err = CreateObjectOfShedule(i)
+		err = сreateObjectOfShedule(i)
 	}
 	return err
 }
