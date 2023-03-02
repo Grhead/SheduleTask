@@ -9,6 +9,6 @@ func main() {
 	//q := getting.GetSubjectFromDb()
 	q := getting.GetTutorsFromDb()
 	for _, i := range q {
-		fmt.Println(i)
+		fmt.Println(i.SecondName)
 	}
 }

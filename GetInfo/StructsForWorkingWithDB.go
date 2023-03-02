@@ -1,15 +1,5 @@
 package GetInfo
 
-import "time"
-
-type ObjectPattern struct {
-	Subject    int
-	Tutor      int
-	Auditorium int
-	Type       int
-	Group      int
-	Date       time.Time
-}
 type Subjects struct {
 	Id          int    `db:"Id"`
 	SubjectItem string `db:"Subject_item"`
