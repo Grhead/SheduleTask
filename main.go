@@ -12,7 +12,7 @@ import (
 
 func main() {
 	srv.InitDB()
-	//LaunchServer()
+	LaunchServer()
 	Filter.FilterFunction("0", 0)
 	var q = Filter.GetDayOfWeek(Filter.FilterFunction("0", 0))
 	for _, i := range q {
@@ -24,8 +24,8 @@ func main() {
 }
 func LaunchServer() {
 	s := grpc.NewServer()
-	srv := &Server.GRPCServer{}
-	ProtoApi.RegisterSheduleServiceServer(s, srv)
+	srvi := &Server.GRPCServer{}
+	ProtoApi.RegisterSheduleServiceServer(s, srvi)
 	l, _ := net.Listen("tcp", ":8787")
 	s.Serve(l)
 }
