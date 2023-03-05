@@ -2,18 +2,14 @@ package Server
 
 import (
 	"context"
-	"fmt"
+	"time"
 	"timesheet/GetInfo"
 	"timesheet/ProtoApi"
+	"timesheet/SetInfo"
 )
 
 type GRPCServer struct {
 	ProtoApi.SheduleServiceServer
-}
-
-func (G GRPCServer) mustEmbedUnimplementedSheduleServiceServer() {
-	//TODO implement me
-	panic("implement me")
 }
 
 func (G GRPCServer) GetSubjectFromDbRPC(ctx context.Context, wrap *ProtoApi.Wrap) (*ProtoApi.SubjectsFromDb, error) {
@@ -51,7 +47,6 @@ func (G GRPCServer) GetTypeFromDbRPC(ctx context.Context, wrap *ProtoApi.Wrap) (
 	var results []*ProtoApi.StructType
 	for _, i := range DefStruct {
 		var temp = ProtoApi.StructType{Id: i.Id, Type: i.Type}
-		fmt.Println(i.Type)
 		results = append(results, &temp)
 	}
 	return &ProtoApi.TypesFromDb{Types: results}, nil
@@ -65,4 +60,38 @@ func (G GRPCServer) GetGroupFromDbRPC(ctx context.Context, wrap *ProtoApi.Wrap) 
 		results = append(results, &temp)
 	}
 	return &ProtoApi.GroupsFromDb{Groups: results}, nil
+}
+
+//func (G GRPCServer) GetSheduleFromDb(ctx context.Context, Filter *ProtoApi.Filter) (*ProtoApi.SheduleArray, error) {
+//	var results []*SetInfo.ObjectPattern
+//	for _, i := range SheduleArray.Objects {
+//		var t SetInfo.ObjectPattern
+//		t.Auditorium = i.Auditorium
+//		t.Tutor = i.Tutor
+//		t.Type = i.Type
+//		t.Subject = i.Subject
+//		t.Number = i.Number
+//		t.Group = i.Group
+//		t.Dates = time.Date(int(i.Dates.Year), time.Month(i.Dates.Month), int(i.Dates.Day), int(i.Dates.Hours), int(i.Dates.Minutes), int(i.Dates.Seconds), 0, time.UTC)
+//		results = append(results, &t)
+//	}
+//	SetInfo.InsertionToDb(results)
+//	return &ProtoApi.Wrap{}, nil
+//}
+
+func (G GRPCServer) AddShedule(ctx context.Context, SheduleArray *ProtoApi.SheduleArray) (*ProtoApi.Wrap, error) {
+	var results []*SetInfo.ObjectPattern
+	for _, i := range SheduleArray.Objects {
+		var t SetInfo.ObjectPattern
+		t.Auditorium = i.Auditorium
+		t.Tutor = i.Tutor
+		t.Type = i.Type
+		t.Subject = i.Subject
+		t.Number = i.Number
+		t.Group = i.Group
+		t.Dates = time.Date(int(i.Dates.Year), time.Month(i.Dates.Month), int(i.Dates.Day), int(i.Dates.Hours), int(i.Dates.Minutes), int(i.Dates.Seconds), 0, time.UTC)
+		results = append(results, &t)
+	}
+	SetInfo.InsertionToDb(results)
+	return &ProtoApi.Wrap{}, nil
 }

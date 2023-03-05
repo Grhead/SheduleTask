@@ -9,6 +9,7 @@ service SheduleService{
       rpc GetTypeFromDbRPC(Wrap) returns (TypesFromDb);
       rpc GetGroupFromDbRPC(Wrap) returns (GroupsFromDb);
       rpc GetSheduleFromDb(Filter) returns (SheduleArray);
+      rpc AddShedule(SheduleArray) returns (Wrap);
 }
 
 message Wrap{}
@@ -19,6 +20,10 @@ message Filter{
 }
 
 message SheduleArray{
+  repeated SheduleObject Objects = 1;
+}
+
+message SheduleObject{
     int32 Subject = 1;
     int32 Tutor = 2;
     int32 Auditorium = 3;

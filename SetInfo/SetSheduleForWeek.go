@@ -6,21 +6,22 @@ import (
 )
 
 type ObjectPattern struct {
-	Subject    int       `db:"Subject_item"`
-	Tutor      int       `db:"Tutor"`
-	Auditorium int       `db:"Classroom"`
-	Type       int       `db:"Type"`
-	Group      int       `db:"Group_name"`
+	Id         int32     `db:"Id"`
+	Subject    int32     `db:"Subject_item"`
+	Tutor      int32     `db:"Tutor"`
+	Auditorium int32     `db:"Classroom"`
+	Type       int32     `db:"Type"`
+	Group      int32     `db:"Group_name"`
 	Dates      time.Time `db:"Dates"`
-	Number     int       `db:"Number"`
+	Number     int32     `db:"Number"`
 }
 
-func сreateObjectOfShedule(NewObjectStruct ObjectPattern) error {
+func сreateObjectOfShedule(NewObjectStruct *ObjectPattern) error {
 	sqlStr := "INSERT INTO Timesheet (Subject_item, Classroom, Tutor, Type, Group_name, Dates, Number) VALUES (?, ?, ?, ?, ?, ?, ?)"
 	_, err := srv.Db.Exec(sqlStr, NewObjectStruct.Subject, NewObjectStruct.Auditorium, NewObjectStruct.Tutor, NewObjectStruct.Type, NewObjectStruct.Group, NewObjectStruct.Dates, NewObjectStruct.Number)
 	return err
 }
-func InsertionToDb(SheduleTable []ObjectPattern) error {
+func InsertionToDb(SheduleTable []*ObjectPattern) error {
 	var err error
 	for _, i := range SheduleTable {
 		err = сreateObjectOfShedule(i)

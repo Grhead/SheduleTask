@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"google.golang.org/grpc"
 	"net"
-	"timesheet/GetInfo"
+	"timesheet/Filter"
 	"timesheet/ProtoApi"
 	"timesheet/Server"
 	srv "timesheet/Service"
@@ -12,19 +12,15 @@ import (
 
 func main() {
 	srv.InitDB()
-	fmt.Println(GetInfo.GetSubjectFromDb())
-	LaunchServer()
-	//var q []SetInfo.ObjectPattern
-	//var t SetInfo.ObjectPattern
-	//t.Auditorium = 1
-	//t.Tutor = 2
-	//t.Type = 3
-	//t.Subject = 2
-	//t.Number = 5
-	//t.Group = 1
-	//t.Dates = time.Date(2023, time.March, 22, 0, 0, 0, 0, time.UTC)
-	//q = append(q, t)
-	//fmt.Println(SetInfo.InsertionToDb(q))
+	//LaunchServer()
+	Filter.FilterFunction("0", 0)
+	var q = Filter.GetDayOfWeek(Filter.FilterFunction("0", 0))
+	for _, i := range q {
+		fmt.Println(i)
+	}
+	//for _, i := range *q {
+	//	fmt.Println(i.SheduleTableItem)
+	//}
 }
 func LaunchServer() {
 	s := grpc.NewServer()
