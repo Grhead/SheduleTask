@@ -3,6 +3,7 @@ package Server
 import (
 	"context"
 	"time"
+	"timesheet/FilterPack"
 	"timesheet/GetInfo"
 	"timesheet/ProtoApi"
 	"timesheet/SetInfo"
@@ -62,24 +63,26 @@ func (G GRPCServer) GetGroupFromDbRPC(ctx context.Context, wrap *ProtoApi.Wrap) 
 	return &ProtoApi.GroupsFromDb{Groups: results}, nil
 }
 
-//func (G GRPCServer) GetSheduleFromDb(ctx context.Context, Filter *ProtoApi.Filter) (*ProtoApi.SheduleArray, error) {
-//	var results []*SetInfo.ObjectPattern
-//	for _, i := range SheduleArray.Objects {
-//		var t SetInfo.ObjectPattern
-//		t.Auditorium = i.Auditorium
-//		t.Tutor = i.Tutor
-//		t.Type = i.Type
-//		t.Subject = i.Subject
-//		t.Number = i.Number
-//		t.Group = i.Group
-//		t.Dates = time.Date(int(i.Dates.Year), time.Month(i.Dates.Month), int(i.Dates.Day), int(i.Dates.Hours), int(i.Dates.Minutes), int(i.Dates.Seconds), 0, time.UTC)
-//		results = append(results, &t)
-//	}
-//	SetInfo.InsertionToDb(results)
-//	return &ProtoApi.Wrap{}, nil
-//}
+func (G GRPCServer) GetSheduleFromDb(ctx context.Context, Filter *ProtoApi.Filter) (*ProtoApi.SheduleArrayByWeek, error) {
+	var ArrayOfFilterFunction [7]FilterPack.ArrayStruct
+	ArrayOfFilterFunction = FilterPack.GetDayOfWeek(FilterPack.FilterFunction(Filter.Filter, Filter.Value))
+	var results *ProtoApi.SheduleArrayByWeek
+	for j := 0; j < 8; j++ {
+		for _, i := range ArrayOfFilterFunction {
+			var t *ProtoApi.SheduleObject
+			t.Auditorium = i.Arr[j].Auditorium
+			t.Tutor = i.Arr[j].Tutor
+			t.Type = i.Arr[j].Type
+			t.Subject = i.Arr[j].Subject
+			t.Number = i.Arr[j].Number
+			t.Group = i.Arr[j].Group
+			results.DaysOfObjects[j].Objects = append(results.DaysOfObjects[j].Objects, t)
+		}
+	}
+	return results, nil
+}
 
-func (G GRPCServer) AddShedule(ctx context.Context, SheduleArray *ProtoApi.SheduleArray) (*ProtoApi.Wrap, error) {
+func (G GRPCServer) AddShedule(ctx context.Context, SheduleArray *ProtoApi.AllSheduleArray) (*ProtoApi.Wrap, error) {
 	var results []*SetInfo.ObjectPattern
 	for _, i := range SheduleArray.Objects {
 		var t SetInfo.ObjectPattern

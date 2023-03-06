@@ -4,23 +4,31 @@ import (
 	"fmt"
 	"google.golang.org/grpc"
 	"net"
-	"timesheet/Filter"
+	"timesheet/FilterPack"
 	"timesheet/ProtoApi"
 	"timesheet/Server"
 	srv "timesheet/Service"
+	"timesheet/SetInfo"
 )
 
 func main() {
 	srv.InitDB()
-	LaunchServer()
-	Filter.FilterFunction("0", 0)
-	var q = Filter.GetDayOfWeek(Filter.FilterFunction("0", 0))
-	for _, i := range q {
-		fmt.Println(i)
+	//LaunchServer()
+	//FilterPack.FilterFunction("0", 0)
+	//var q = FilterPack.GetDayOfWeek(FilterPack.FilterFunction("0", 0))
+	var q [7]FilterPack.ArrayStruct
+	q = FilterPack.GetDayOfWeek(FilterPack.FilterFunction("0", 0))
+	temp := SetInfo.ObjectPattern{}
+	for j := 0; j < 8; j++ {
+		for _, i := range q {
+			if i.Arr[j] != temp {
+				fmt.Println(i.Arr[j])
+			} else {
+				i.Arr = append(i.Arr, temp)
+			}
+		}
 	}
-	//for _, i := range *q {
-	//	fmt.Println(i.SheduleTableItem)
-	//}
+	//fmt.Println(q[0].Arr[2])
 }
 func LaunchServer() {
 	s := grpc.NewServer()

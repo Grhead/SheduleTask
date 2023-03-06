@@ -37,8 +37,8 @@ type SheduleServiceClient interface {
 	GetAuditoriumFromDbRPC(ctx context.Context, in *Wrap, opts ...grpc.CallOption) (*AuditoriumsFromDb, error)
 	GetTypeFromDbRPC(ctx context.Context, in *Wrap, opts ...grpc.CallOption) (*TypesFromDb, error)
 	GetGroupFromDbRPC(ctx context.Context, in *Wrap, opts ...grpc.CallOption) (*GroupsFromDb, error)
-	GetSheduleFromDb(ctx context.Context, in *Filter, opts ...grpc.CallOption) (*SheduleArray, error)
-	AddShedule(ctx context.Context, in *SheduleArray, opts ...grpc.CallOption) (*Wrap, error)
+	GetSheduleFromDb(ctx context.Context, in *Filter, opts ...grpc.CallOption) (*SheduleArrayByWeek, error)
+	AddShedule(ctx context.Context, in *AllSheduleArray, opts ...grpc.CallOption) (*Wrap, error)
 }
 
 type sheduleServiceClient struct {
@@ -94,8 +94,8 @@ func (c *sheduleServiceClient) GetGroupFromDbRPC(ctx context.Context, in *Wrap, 
 	return out, nil
 }
 
-func (c *sheduleServiceClient) GetSheduleFromDb(ctx context.Context, in *Filter, opts ...grpc.CallOption) (*SheduleArray, error) {
-	out := new(SheduleArray)
+func (c *sheduleServiceClient) GetSheduleFromDb(ctx context.Context, in *Filter, opts ...grpc.CallOption) (*SheduleArrayByWeek, error) {
+	out := new(SheduleArrayByWeek)
 	err := c.cc.Invoke(ctx, SheduleService_GetSheduleFromDb_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -103,7 +103,7 @@ func (c *sheduleServiceClient) GetSheduleFromDb(ctx context.Context, in *Filter,
 	return out, nil
 }
 
-func (c *sheduleServiceClient) AddShedule(ctx context.Context, in *SheduleArray, opts ...grpc.CallOption) (*Wrap, error) {
+func (c *sheduleServiceClient) AddShedule(ctx context.Context, in *AllSheduleArray, opts ...grpc.CallOption) (*Wrap, error) {
 	out := new(Wrap)
 	err := c.cc.Invoke(ctx, SheduleService_AddShedule_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -121,8 +121,8 @@ type SheduleServiceServer interface {
 	GetAuditoriumFromDbRPC(context.Context, *Wrap) (*AuditoriumsFromDb, error)
 	GetTypeFromDbRPC(context.Context, *Wrap) (*TypesFromDb, error)
 	GetGroupFromDbRPC(context.Context, *Wrap) (*GroupsFromDb, error)
-	GetSheduleFromDb(context.Context, *Filter) (*SheduleArray, error)
-	AddShedule(context.Context, *SheduleArray) (*Wrap, error)
+	GetSheduleFromDb(context.Context, *Filter) (*SheduleArrayByWeek, error)
+	AddShedule(context.Context, *AllSheduleArray) (*Wrap, error)
 	mustEmbedUnimplementedSheduleServiceServer()
 }
 
@@ -145,10 +145,10 @@ func (UnimplementedSheduleServiceServer) GetTypeFromDbRPC(context.Context, *Wrap
 func (UnimplementedSheduleServiceServer) GetGroupFromDbRPC(context.Context, *Wrap) (*GroupsFromDb, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetGroupFromDbRPC not implemented")
 }
-func (UnimplementedSheduleServiceServer) GetSheduleFromDb(context.Context, *Filter) (*SheduleArray, error) {
+func (UnimplementedSheduleServiceServer) GetSheduleFromDb(context.Context, *Filter) (*SheduleArrayByWeek, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetSheduleFromDb not implemented")
 }
-func (UnimplementedSheduleServiceServer) AddShedule(context.Context, *SheduleArray) (*Wrap, error) {
+func (UnimplementedSheduleServiceServer) AddShedule(context.Context, *AllSheduleArray) (*Wrap, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddShedule not implemented")
 }
 func (UnimplementedSheduleServiceServer) mustEmbedUnimplementedSheduleServiceServer() {}
@@ -273,7 +273,7 @@ func _SheduleService_GetSheduleFromDb_Handler(srv interface{}, ctx context.Conte
 }
 
 func _SheduleService_AddShedule_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SheduleArray)
+	in := new(AllSheduleArray)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -285,7 +285,7 @@ func _SheduleService_AddShedule_Handler(srv interface{}, ctx context.Context, de
 		FullMethod: SheduleService_AddShedule_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SheduleServiceServer).AddShedule(ctx, req.(*SheduleArray))
+		return srv.(SheduleServiceServer).AddShedule(ctx, req.(*AllSheduleArray))
 	}
 	return interceptor(ctx, in, info, handler)
 }

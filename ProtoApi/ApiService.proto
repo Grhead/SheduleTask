@@ -8,8 +8,8 @@ service SheduleService{
       rpc GetAuditoriumFromDbRPC(Wrap) returns (AuditoriumsFromDb);
       rpc GetTypeFromDbRPC(Wrap) returns (TypesFromDb);
       rpc GetGroupFromDbRPC(Wrap) returns (GroupsFromDb);
-      rpc GetSheduleFromDb(Filter) returns (SheduleArray);
-      rpc AddShedule(SheduleArray) returns (Wrap);
+      rpc GetSheduleFromDb(Filter) returns (SheduleArrayByWeek);
+      rpc AddShedule(AllSheduleArray) returns (Wrap);
 }
 
 message Wrap{}
@@ -19,7 +19,11 @@ message Filter{
   int32 value = 2;
 }
 
-message SheduleArray{
+message AllSheduleArray{
+  repeated SheduleObject Objects = 1;
+}
+
+message SheduleArrayByDay{
   repeated SheduleObject Objects = 1;
 }
 
@@ -32,6 +36,11 @@ message SheduleObject{
     DateTime Dates = 6;
     int32 Number = 7;
 }
+
+message SheduleArrayByWeek{
+  repeated SheduleArrayByDay DaysOfObjects = 1;
+}
+
 message DateTime {
   int32 year = 1;
   int32 month = 2;
