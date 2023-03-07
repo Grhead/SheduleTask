@@ -66,8 +66,9 @@ func AdditionSubjectToEachDay(Week [7]ArrayStruct) [7]ArrayStruct {
 		for _, j := range Week[i].SubjectsOfThisDay {
 			MissingSubjectsMap[j.Number]++
 		}
-		for _, v := range MissingSubjectsMap {
+		for w, v := range MissingSubjectsMap {
 			if v == 0 {
+				newNullObjects.Number = w
 				Week[i].SubjectsOfThisDay = append(Week[i].SubjectsOfThisDay, newNullObjects)
 			}
 		}
