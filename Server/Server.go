@@ -67,7 +67,7 @@ func (G GRPCServer) GetSheduleFromDb(ctx context.Context, Filter *ProtoApi.Filte
 	var ArrayOfFilterFunction [7]FilterPack.ArrayStruct
 	ArrayOfFilterFunction = FilterPack.GetDayOfWeek(FilterPack.FilterFunction(Filter.Filter, Filter.Value))
 	var results *ProtoApi.SheduleArrayByWeek
-	for j := 0; j < 8; j++ {
+	for j := 0; j < 7; j++ {
 		for _, i := range ArrayOfFilterFunction {
 			var t *ProtoApi.SheduleObject
 			t.Auditorium = i.Arr[j].Auditorium
