@@ -16,6 +16,17 @@ type ObjectPattern struct {
 	Number     int32     `db:"Number"`
 }
 
+type StringObjectPattern struct {
+	Id         int32     `db:"Id"`
+	Subject    string    `db:"Subject_item"`
+	Tutor      string    `db:"Tutor"`
+	Auditorium string    `db:"Classroom"`
+	Type       string    `db:"Type"`
+	Group      string    `db:"Group_name"`
+	Dates      time.Time `db:"Dates"`
+	Number     int32     `db:"Number"`
+}
+
 func сreateObjectOfShedule(NewObjectStruct *ObjectPattern) error {
 	sqlStr := "INSERT INTO Timesheet (Subject_item, Classroom, Tutor, Type, Group_name, Dates, Number) VALUES (?, ?, ?, ?, ?, ?, ?)"
 	_, err := srv.Db.Exec(sqlStr, NewObjectStruct.Subject, NewObjectStruct.Auditorium, NewObjectStruct.Tutor, NewObjectStruct.Type, NewObjectStruct.Group, NewObjectStruct.Dates, NewObjectStruct.Number)

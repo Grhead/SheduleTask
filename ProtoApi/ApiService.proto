@@ -23,17 +23,22 @@ message AllSheduleArray{
   repeated SheduleObject Objects = 1;
 }
 
-message SheduleArrayByDay{
-  repeated SheduleObject Objects = 1;
+message SheduleArrayByWeek{
+  repeated SheduleArrayByDay DaysOfObjects = 1;
 }
 
-message DateTime {
-  int32 year = 1;
-  int32 month = 2;
-  int32 day = 3;
-  int32 hours = 4;
-  int32 minutes = 5;
-  int32 seconds = 6;
+message SheduleArrayByDay{
+  repeated StringSheduleObject ObjectsString = 1;
+}
+
+message StringSheduleObject{
+  string Subject = 1;
+  string Tutor = 2;
+  string Auditorium = 3;
+  string Type = 4;
+  string Group = 5;
+  DateTime Dates = 6;
+  int32 Number = 7;
 }
 
 message SheduleObject{
@@ -46,8 +51,13 @@ message SheduleObject{
     int32 Number = 7;
 }
 
-message SheduleArrayByWeek{
-  repeated SheduleArrayByDay DaysOfObjects = 1;
+message DateTime {
+  int32 year = 1;
+  int32 month = 2;
+  int32 day = 3;
+  int32 hours = 4;
+  int32 minutes = 5;
+  int32 seconds = 6;
 }
 
 message SubjectsFromDb{
