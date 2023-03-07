@@ -67,17 +67,30 @@ func (G GRPCServer) GetSheduleFromDb(ctx context.Context, Filter *ProtoApi.Filte
 	var ArrayOfFilterFunction [7]FilterPack.ArrayStruct
 	ArrayOfFilterFunction = FilterPack.GetDayOfWeek(FilterPack.FilterFunction(Filter.Filter, Filter.Value))
 	var results *ProtoApi.SheduleArrayByWeek
-	for j := 0; j < 7; j++ {
-		for _, i := range ArrayOfFilterFunction {
+// 	for j := 0; j < 7; j++ {
+// 		for _, i := range ArrayOfFilterFunction {
+// 			var t *ProtoApi.SheduleObject
+// 			t.Auditorium = i.Arr[j].Auditorium
+// 			t.Tutor = i.Arr[j].Tutor
+// 			t.Type = i.Arr[j].Type
+// 			t.Subject = i.Arr[j].Subject
+// 			t.Number = i.Arr[j].Number
+// 			t.Group = i.Arr[j].Group
+// 			results.DaysOfObjects[j].Objects = append(results.DaysOfObjects[j].Objects, t)
+// 		}
+// 	}
+	for i := 0; i < 7; i++ {
+		for j := 0; j < 8; j++{
 			var t *ProtoApi.SheduleObject
-			t.Auditorium = i.Arr[j].Auditorium
-			t.Tutor = i.Arr[j].Tutor
-			t.Type = i.Arr[j].Type
-			t.Subject = i.Arr[j].Subject
-			t.Number = i.Arr[j].Number
-			t.Group = i.Arr[j].Group
-			results.DaysOfObjects[j].Objects = append(results.DaysOfObjects[j].Objects, t)
+			t.Auditorium = ArrayOfFilterFunction[i].Arr[j].Auditorium
+			t.Tutor = ArrayOfFilterFunction[i].Arr[j].Tutor
+			t.Type = ArrayOfFilterFunction[i].Arr[j].Type
+			t.Subject = ArrayOfFilterFunction[i].Arr[j].Subject
+			t.Number = ArrayOfFilterFunction[i].Arr[j].Number
+			t.Group = ArrayOfFilterFunction[i].Arr[j].Group
+			t.Dates = ArrayOfFilterFunction[i].Arr[j].Dates
 		}
+		results.DaysOfObjects[i].Objects = append(results.DaysOfObjects[i].Objects, t)
 	}
 	return results, nil
 }
