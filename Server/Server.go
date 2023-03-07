@@ -3,6 +3,7 @@ package Server
 import (
 	"context"
 	"time"
+	"timesheet/FilterPack"
 	"timesheet/GetInfo"
 	"timesheet/ProtoApi"
 	"timesheet/SetInfo"
@@ -62,35 +63,35 @@ func (G GRPCServer) GetGroupFromDbRPC(ctx context.Context, wrap *ProtoApi.Wrap) 
 	return &ProtoApi.GroupsFromDb{Groups: results}, nil
 }
 
-//func (G GRPCServer) GetSheduleFromDb(ctx context.Context, Filter *ProtoApi.Filter) (*ProtoApi.SheduleArrayByWeek, error) {
-//	var ArrayOfFilterFunction [7]FilterPack.ArrayStruct
-//	ArrayOfFilterFunction = FilterPack.GetDaysOfWeek(FilterPack.LowFilterFunction(Filter.Filter, Filter.Value))
-//	var SortedAdditionalArray = FilterPack.AdditionSubjectToEachDay(ArrayOfFilterFunction)
-//	var results ProtoApi.SheduleArrayByWeek
-//	for i := 0; i < 7; i++ {
-//		var tArray ProtoApi.SheduleArrayByDay
-//		for j := 0; j < 8; j++ {
-//			var t ProtoApi.StringSheduleObject
-//			t.Auditorium = SortedAdditionalArray[i].SubjectsOfThisDay[j].Auditorium
-//			t.Tutor = SortedAdditionalArray[i].SubjectsOfThisDay[j].Tutor
-//			t.Type = SortedAdditionalArray[i].SubjectsOfThisDay[j].Type
-//			t.Subject = SortedAdditionalArray[i].SubjectsOfThisDay[j].Subject
-//			t.Number = SortedAdditionalArray[i].SubjectsOfThisDay[j].Number
-//			t.Group = SortedAdditionalArray[i].SubjectsOfThisDay[j].Group
-//			t.Dates = &ProtoApi.DateTime{
-//				Year:    int32(SortedAdditionalArray[i].SubjectsOfThisDay[j].Dates.Year()),
-//				Month:   int32(SortedAdditionalArray[i].SubjectsOfThisDay[j].Dates.Month()),
-//				Day:     int32(SortedAdditionalArray[i].SubjectsOfThisDay[j].Dates.Day()),
-//				Hours:   0,
-//				Minutes: 0,
-//				Seconds: 0,
-//			}
-//			tArray.ObjectsString = append(tArray.ObjectsString, &t)
-//		}
-//		results.DaysOfObjects = append(results.DaysOfObjects, &tArray)
-//	}
-//	return &results, nil
-//}
+func (G GRPCServer) GetSheduleFromDb(ctx context.Context, Filter *ProtoApi.Filter) (*ProtoApi.SheduleArrayByWeek, error) {
+	var ArrayOfFilterFunction [7]FilterPack.ArrayStructString
+	ArrayOfFilterFunction = FilterPack.GetDaysOfWeekForStrings(FilterPack.FilterFunction(Filter.Filter, Filter.Value))
+	var SortedAdditionalArray = FilterPack.AdditionSubjectToEachDayForStrings(ArrayOfFilterFunction)
+	var results ProtoApi.SheduleArrayByWeek
+	for i := 0; i < 7; i++ {
+		var tArray ProtoApi.SheduleArrayByDay
+		for j := 0; j < 8; j++ {
+			var t ProtoApi.StringSheduleObject
+			t.Auditorium = SortedAdditionalArray[i].SubjectsOfThisDay[j].Auditorium
+			t.Tutor = SortedAdditionalArray[i].SubjectsOfThisDay[j].SecondName + " " + SortedAdditionalArray[i].SubjectsOfThisDay[j].FirstName + " " + SortedAdditionalArray[i].SubjectsOfThisDay[j].LastName
+			t.Type = SortedAdditionalArray[i].SubjectsOfThisDay[j].Type
+			t.Subject = SortedAdditionalArray[i].SubjectsOfThisDay[j].Subject
+			t.Number = SortedAdditionalArray[i].SubjectsOfThisDay[j].Number
+			t.Group = SortedAdditionalArray[i].SubjectsOfThisDay[j].Group
+			t.Dates = &ProtoApi.DateTime{
+				Year:    int32(SortedAdditionalArray[i].SubjectsOfThisDay[j].Dates.Year()),
+				Month:   int32(SortedAdditionalArray[i].SubjectsOfThisDay[j].Dates.Month()),
+				Day:     int32(SortedAdditionalArray[i].SubjectsOfThisDay[j].Dates.Day()),
+				Hours:   0,
+				Minutes: 0,
+				Seconds: 0,
+			}
+			tArray.ObjectsString = append(tArray.ObjectsString, &t)
+		}
+		results.DaysOfObjects = append(results.DaysOfObjects, &tArray)
+	}
+	return &results, nil
+}
 
 func (G GRPCServer) AddShedule(ctx context.Context, SheduleArray *ProtoApi.AllSheduleArray) (*ProtoApi.Wrap, error) {
 	var results []*SetInfo.ObjectPattern
