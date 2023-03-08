@@ -22,6 +22,7 @@ type ObjectPattern struct {
 type StringObjectPattern struct {
 	Id         int32     `db:"Id"`
 	Subject    string    `db:"Subject_item"`
+	Tid        string    `db:"T.Id"`
 	SecondName string    `db:"SecondName"`
 	FirstName  string    `db:"FirstName"`
 	LastName   string    `db:"LastName"`

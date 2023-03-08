@@ -37,13 +37,8 @@ func FilterFunction(Filter string, value int32) []*SetInfo.StringObjectPattern {
 	var AllObjectsFromDb []*SetInfo.StringObjectPattern
 	BeginningOfThisWeek := now.BeginningOfWeek().Format("20060102")
 	EndingOfThisWeek := now.EndOfWeek().Format("20060102")
-	if Filter == "0" && value == 0 {
-		query := "SELECT Timesheet.Id, S.Subject_item, C.Classroom, Gn.Group_name, T.SecondName, T.FirstName, T.LastName, T2.Type, Number, Timesheet.Dates\nFROM Timesheet JOIN Subjects S on S.Id = Timesheet.Subject_item JOIN Classrooms C on C.Id = Timesheet.Classroom JOIN Groups_name Gn on Gn.Id = Timesheet.Group_name JOIN Tutors T on T.Id = Timesheet.Tutor JOIN Types T2 on T2.Id = Timesheet.Type WHERE (Dates < ? AND Dates > ?)"
-		srv.Db.Select(&AllObjectsFromDb, query, EndingOfThisWeek, BeginningOfThisWeek)
-	} else {
-		query := "SELECT Timesheet.Id, S.Subject_item, C.Classroom, Gn.Group_name, T.SecondName, T.FirstName, T.LastName, T2.Type, Number, Timesheet.Dates\nFROM Timesheet JOIN Subjects S on S.Id = Timesheet.Subject_item JOIN Classrooms C on C.Id = Timesheet.Classroom JOIN Groups_name Gn on Gn.Id = Timesheet.Group_name JOIN Tutors T on T.Id = Timesheet.Tutor JOIN Types T2 on T2.Id = Timesheet.Type WHERE (? = ?)"
-		srv.Db.Select(&AllObjectsFromDb, query, Filter, value)
-	}
+	query := "SELECT Timesheet.Id, S.Subject_item, C.Classroom, Gn.Group_name, T.Id, T.SecondName, T.FirstName, T.LastName, T2.Type, Number, Timesheet.Dates FROM Timesheet JOIN Subjects S on S.Id = Timesheet.Subject_item JOIN Classrooms C on C.Id = Timesheet.Classroom JOIN Groups_name Gn on Gn.Id = Timesheet.Group_name JOIN Tutors T on T.Id = Timesheet.Tutor JOIN Types T2 on T2.Id = Timesheet.Type WHERE Dates >= ? AND Dates <= ? AND T.Id = ?"
+	srv.Db.Select(&AllObjectsFromDb, query, BeginningOfThisWeek, EndingOfThisWeek, value)
 	return AllObjectsFromDb
 }
 
@@ -55,7 +50,7 @@ func FilterFunctionWithGroup(Filter string, value int32) []*SetInfo.StringObject
 	fmt.Println(BeginningOfThisWeek)
 	fmt.Println(EndingOfThisWeek)
 	if Filter != "0" && value == 0 {
-		query := "SELECT Timesheet.Id, S.Subject_item, C.Classroom, Gn.Group_name, T.SecondName, T.FirstName, T.LastName, T2.Type, Number, Timesheet.Dates\nFROM Timesheet JOIN Subjects S on S.Id = Timesheet.Subject_item JOIN Classrooms C on C.Id = Timesheet.Classroom JOIN Groups_name Gn on Gn.Id = Timesheet.Group_name JOIN Tutors T on T.Id = Timesheet.Tutor JOIN Types T2 on T2.Id = Timesheet.Type WHERE Dates >= ? AND Dates <= ?  AND Gn.Group_name = ?"
+		query := "SELECT Timesheet.Id, S.Subject_item, C.Classroom, Gn.Group_name, T.Id, T.SecondName, T.FirstName, T.LastName, T2.Type, Number, Timesheet.Dates\nFROM Timesheet JOIN Subjects S on S.Id = Timesheet.Subject_item JOIN Classrooms C on C.Id = Timesheet.Classroom JOIN Groups_name Gn on Gn.Id = Timesheet.Group_name JOIN Tutors T on T.Id = Timesheet.Tutor JOIN Types T2 on T2.Id = Timesheet.Type WHERE Dates >= ? AND Dates <= ?  AND Gn.Group_name = ?"
 		srv.Db.Select(&AllObjectsFromDb, query, BeginningOfThisWeek, EndingOfThisWeek, Filter)
 	}
 	for _, i := range AllObjectsFromDb {
@@ -68,7 +63,6 @@ func GetDaysOfWeekForStrings(AllObjectsFromDb []*SetInfo.StringObjectPattern) [7
 	var SheduleTableByDayOfWeek [7]ArrayStructString
 	for _, i := range AllObjectsFromDb {
 		DayOfWeekByDateFromDb := i.Dates.Weekday()
-		fmt.Println(DayOfWeekByDateFromDb)
 		switch DayOfWeekByDateFromDb {
 		case time.Monday:
 			SheduleTableByDayOfWeek[0].SubjectsOfThisDay = append(SheduleTableByDayOfWeek[0].SubjectsOfThisDay, *i)

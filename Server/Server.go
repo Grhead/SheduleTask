@@ -119,3 +119,33 @@ func (G GRPCServer) CheckAuth(ctx context.Context, AuthCtx *ProtoApi.Authorizati
 	fmt.Println(DefStruct)
 	return &ProtoApi.AuthorizationResult{IsAccept: strconv.FormatBool(DefStruct)}, nil
 }
+
+func (G GRPCServer) GetSheduleFromDbForTutor(ctx context.Context, Filter *ProtoApi.Filter) (*ProtoApi.SheduleArrayByWeek, error) {
+	var ArrayOfFilterFunction [7]FilterPack.ArrayStructString
+	ArrayOfFilterFunction = FilterPack.GetDaysOfWeekForStrings(FilterPack.FilterFunction(Filter.Filter, Filter.Value))
+	var SortedAdditionalArray = FilterPack.AdditionSubjectToEachDayForStrings(ArrayOfFilterFunction)
+	var results ProtoApi.SheduleArrayByWeek
+	for i := 0; i < 7; i++ {
+		var tArray ProtoApi.SheduleArrayByDay
+		for j := 0; j < 8; j++ {
+			var t ProtoApi.StringSheduleObject
+			t.Auditorium = SortedAdditionalArray[i].SubjectsOfThisDay[j].Auditorium
+			t.Tutor = SortedAdditionalArray[i].SubjectsOfThisDay[j].SecondName + " " + SortedAdditionalArray[i].SubjectsOfThisDay[j].FirstName + " " + SortedAdditionalArray[i].SubjectsOfThisDay[j].LastName
+			t.Type = SortedAdditionalArray[i].SubjectsOfThisDay[j].Type
+			t.Subject = SortedAdditionalArray[i].SubjectsOfThisDay[j].Subject
+			t.Number = SortedAdditionalArray[i].SubjectsOfThisDay[j].Number
+			t.Group = SortedAdditionalArray[i].SubjectsOfThisDay[j].Group
+			t.Dates = &ProtoApi.DateTime{
+				Year:    int32(SortedAdditionalArray[i].SubjectsOfThisDay[j].Dates.Year()),
+				Month:   int32(SortedAdditionalArray[i].SubjectsOfThisDay[j].Dates.Month()),
+				Day:     int32(SortedAdditionalArray[i].SubjectsOfThisDay[j].Dates.Day()),
+				Hours:   0,
+				Minutes: 0,
+				Seconds: 0,
+			}
+			tArray.ObjectsString = append(tArray.ObjectsString, &t)
+		}
+		results.DaysOfObjects = append(results.DaysOfObjects, &tArray)
+	}
+	return &results, nil
+}

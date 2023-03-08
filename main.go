@@ -18,9 +18,9 @@ func main() {
 	//var q = FilterPack.GetDaysOfWeek(FilterPack.LowFilterFunction("0", 0))
 	//var q [7]FilterPack.ArrayStructString
 	//fmt.Println(strconv.Itoa(now.BeginningOfWeek().Year()) + strconv.Itoa(int(now.BeginningOfWeek().Month())) + strconv.Itoa(now.BeginningOfWeek().Day()))
-	//q := FilterPack.GetDaysOfWeekForStrings(FilterPack.FilterFunction("0", 0))
+	//q := FilterPack.GetDaysOfWeekForStrings(FilterPack.FilterFunction("0", "1"))
 	//var t = FilterPack.AdditionSubjectToEachDayForStrings(q)
-	//for _, i := range t {
+	//for _, i := range q {
 	//	fmt.Println(i)
 	//}
 

@@ -19,14 +19,15 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	SheduleService_GetSubjectFromDbRPC_FullMethodName    = "/ProtoApi.SheduleService/GetSubjectFromDbRPC"
-	SheduleService_GetTutorsFromDbRPC_FullMethodName     = "/ProtoApi.SheduleService/GetTutorsFromDbRPC"
-	SheduleService_GetAuditoriumFromDbRPC_FullMethodName = "/ProtoApi.SheduleService/GetAuditoriumFromDbRPC"
-	SheduleService_GetTypeFromDbRPC_FullMethodName       = "/ProtoApi.SheduleService/GetTypeFromDbRPC"
-	SheduleService_GetGroupFromDbRPC_FullMethodName      = "/ProtoApi.SheduleService/GetGroupFromDbRPC"
-	SheduleService_GetSheduleFromDb_FullMethodName       = "/ProtoApi.SheduleService/GetSheduleFromDb"
-	SheduleService_AddShedule_FullMethodName             = "/ProtoApi.SheduleService/AddShedule"
-	SheduleService_CheckAuth_FullMethodName              = "/ProtoApi.SheduleService/CheckAuth"
+	SheduleService_GetSubjectFromDbRPC_FullMethodName      = "/ProtoApi.SheduleService/GetSubjectFromDbRPC"
+	SheduleService_GetTutorsFromDbRPC_FullMethodName       = "/ProtoApi.SheduleService/GetTutorsFromDbRPC"
+	SheduleService_GetAuditoriumFromDbRPC_FullMethodName   = "/ProtoApi.SheduleService/GetAuditoriumFromDbRPC"
+	SheduleService_GetTypeFromDbRPC_FullMethodName         = "/ProtoApi.SheduleService/GetTypeFromDbRPC"
+	SheduleService_GetGroupFromDbRPC_FullMethodName        = "/ProtoApi.SheduleService/GetGroupFromDbRPC"
+	SheduleService_GetSheduleFromDb_FullMethodName         = "/ProtoApi.SheduleService/GetSheduleFromDb"
+	SheduleService_AddShedule_FullMethodName               = "/ProtoApi.SheduleService/AddShedule"
+	SheduleService_CheckAuth_FullMethodName                = "/ProtoApi.SheduleService/CheckAuth"
+	SheduleService_GetSheduleFromDbForTutor_FullMethodName = "/ProtoApi.SheduleService/GetSheduleFromDbForTutor"
 )
 
 // SheduleServiceClient is the client API for SheduleService service.
@@ -41,6 +42,7 @@ type SheduleServiceClient interface {
 	GetSheduleFromDb(ctx context.Context, in *Filter, opts ...grpc.CallOption) (*SheduleArrayByWeek, error)
 	AddShedule(ctx context.Context, in *AllSheduleArray, opts ...grpc.CallOption) (*Wrap, error)
 	CheckAuth(ctx context.Context, in *AuthorizationContext, opts ...grpc.CallOption) (*AuthorizationResult, error)
+	GetSheduleFromDbForTutor(ctx context.Context, in *Filter, opts ...grpc.CallOption) (*SheduleArrayByWeek, error)
 }
 
 type sheduleServiceClient struct {
@@ -123,6 +125,15 @@ func (c *sheduleServiceClient) CheckAuth(ctx context.Context, in *AuthorizationC
 	return out, nil
 }
 
+func (c *sheduleServiceClient) GetSheduleFromDbForTutor(ctx context.Context, in *Filter, opts ...grpc.CallOption) (*SheduleArrayByWeek, error) {
+	out := new(SheduleArrayByWeek)
+	err := c.cc.Invoke(ctx, SheduleService_GetSheduleFromDbForTutor_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SheduleServiceServer is the server API for SheduleService service.
 // All implementations must embed UnimplementedSheduleServiceServer
 // for forward compatibility
@@ -135,6 +146,7 @@ type SheduleServiceServer interface {
 	GetSheduleFromDb(context.Context, *Filter) (*SheduleArrayByWeek, error)
 	AddShedule(context.Context, *AllSheduleArray) (*Wrap, error)
 	CheckAuth(context.Context, *AuthorizationContext) (*AuthorizationResult, error)
+	GetSheduleFromDbForTutor(context.Context, *Filter) (*SheduleArrayByWeek, error)
 	mustEmbedUnimplementedSheduleServiceServer()
 }
 
@@ -165,6 +177,9 @@ func (UnimplementedSheduleServiceServer) AddShedule(context.Context, *AllShedule
 }
 func (UnimplementedSheduleServiceServer) CheckAuth(context.Context, *AuthorizationContext) (*AuthorizationResult, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CheckAuth not implemented")
+}
+func (UnimplementedSheduleServiceServer) GetSheduleFromDbForTutor(context.Context, *Filter) (*SheduleArrayByWeek, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSheduleFromDbForTutor not implemented")
 }
 func (UnimplementedSheduleServiceServer) mustEmbedUnimplementedSheduleServiceServer() {}
 
@@ -323,6 +338,24 @@ func _SheduleService_CheckAuth_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SheduleService_GetSheduleFromDbForTutor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Filter)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SheduleServiceServer).GetSheduleFromDbForTutor(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SheduleService_GetSheduleFromDbForTutor_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SheduleServiceServer).GetSheduleFromDbForTutor(ctx, req.(*Filter))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SheduleService_ServiceDesc is the grpc.ServiceDesc for SheduleService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -361,6 +394,10 @@ var SheduleService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CheckAuth",
 			Handler:    _SheduleService_CheckAuth_Handler,
+		},
+		{
+			MethodName: "GetSheduleFromDbForTutor",
+			Handler:    _SheduleService_GetSheduleFromDbForTutor_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

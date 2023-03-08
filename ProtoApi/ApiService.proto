@@ -11,6 +11,7 @@ service SheduleService{
       rpc GetSheduleFromDb(Filter) returns (SheduleArrayByWeek);
       rpc AddShedule(AllSheduleArray) returns (Wrap);
       rpc CheckAuth(AuthorizationContext) returns (AuthorizationResult);
+      rpc GetSheduleFromDbForTutor(Filter) returns (SheduleArrayByWeek);
 }
 
 message Wrap{}
