@@ -2,7 +2,10 @@ package Server
 
 import (
 	"context"
+	"fmt"
+	"strconv"
 	"time"
+	"timesheet/AuthPack"
 	"timesheet/FilterPack"
 	"timesheet/GetInfo"
 	"timesheet/ProtoApi"
@@ -108,4 +111,11 @@ func (G GRPCServer) AddShedule(ctx context.Context, SheduleArray *ProtoApi.AllSh
 	}
 	SetInfo.InsertionToDb(results)
 	return &ProtoApi.Wrap{}, nil
+}
+
+func (G GRPCServer) CheckAuth(ctx context.Context, AuthCtx *ProtoApi.AuthorizationContext) (*ProtoApi.AuthorizationResult, error) {
+	fmt.Println(AuthCtx.Login, " ", AuthCtx.Pass)
+	DefStruct := AuthPack.Authorization(AuthCtx.Login, AuthCtx.Pass)
+	fmt.Println(DefStruct)
+	return &ProtoApi.AuthorizationResult{IsAccept: strconv.FormatBool(DefStruct)}, nil
 }

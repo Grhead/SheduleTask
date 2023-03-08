@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"google.golang.org/grpc"
 	"net"
-	"timesheet/FilterPack"
+	"timesheet/AuthPack"
 	"timesheet/ProtoApi"
 	"timesheet/Server"
 	srv "timesheet/Service"
@@ -12,17 +12,17 @@ import (
 
 func main() {
 	srv.InitDB()
+	fmt.Println(AuthPack.Authorization("user", "user"))
 	LaunchServer()
-
 	//FilterPack.LowFilterFunction("0", 0)
 	//var q = FilterPack.GetDaysOfWeek(FilterPack.LowFilterFunction("0", 0))
 	//var q [7]FilterPack.ArrayStructString
 	//fmt.Println(strconv.Itoa(now.BeginningOfWeek().Year()) + strconv.Itoa(int(now.BeginningOfWeek().Month())) + strconv.Itoa(now.BeginningOfWeek().Day()))
-	q := FilterPack.GetDaysOfWeekForStrings(FilterPack.FilterFunction("0", 0))
-	var t = FilterPack.AdditionSubjectToEachDayForStrings(q)
-	for _, i := range t {
-		fmt.Println(i)
-	}
+	//q := FilterPack.GetDaysOfWeekForStrings(FilterPack.FilterFunction("0", 0))
+	//var t = FilterPack.AdditionSubjectToEachDayForStrings(q)
+	//for _, i := range t {
+	//	fmt.Println(i)
+	//}
 
 	//fmt.Println(q[0].SubjectsOfThisDay[2])
 }

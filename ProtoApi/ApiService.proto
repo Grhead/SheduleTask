@@ -10,9 +10,19 @@ service SheduleService{
       rpc GetGroupFromDbRPC(Wrap) returns (GroupsFromDb);
       rpc GetSheduleFromDb(Filter) returns (SheduleArrayByWeek);
       rpc AddShedule(AllSheduleArray) returns (Wrap);
+      rpc CheckAuth(AuthorizationContext) returns (AuthorizationResult);
 }
 
 message Wrap{}
+
+message AuthorizationContext{
+  string Login = 1;
+  string Pass = 2;
+}
+
+message AuthorizationResult{
+  string IsAccept = 1;
+}
 
 message Filter{
   string Filter = 1;
