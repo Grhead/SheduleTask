@@ -65,7 +65,7 @@ func (G GRPCServer) GetGroupFromDbRPC(ctx context.Context, wrap *ProtoApi.Wrap) 
 
 func (G GRPCServer) GetSheduleFromDb(ctx context.Context, Filter *ProtoApi.Filter) (*ProtoApi.SheduleArrayByWeek, error) {
 	var ArrayOfFilterFunction [7]FilterPack.ArrayStructString
-	ArrayOfFilterFunction = FilterPack.GetDaysOfWeekForStrings(FilterPack.FilterFunction(Filter.Filter, Filter.Value))
+	ArrayOfFilterFunction = FilterPack.GetDaysOfWeekForStrings(FilterPack.FilterFunctionWithGroup(Filter.Filter, Filter.Value))
 	var SortedAdditionalArray = FilterPack.AdditionSubjectToEachDayForStrings(ArrayOfFilterFunction)
 	var results ProtoApi.SheduleArrayByWeek
 	for i := 0; i < 7; i++ {

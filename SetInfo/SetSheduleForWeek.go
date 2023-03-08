@@ -1,7 +1,10 @@
 package SetInfo
 
 import (
+	"fmt"
+	"github.com/jinzhu/now"
 	"time"
+	"timesheet/ProtoApi"
 	srv "timesheet/Service"
 )
 
@@ -30,8 +33,12 @@ type StringObjectPattern struct {
 }
 
 func сreateObjectOfShedule(NewObjectStruct *ObjectPattern) error {
+	fmt.Println(NewObjectStruct)
+	sqlStr1 := "DELETE FROM Timesheet WHERE Group_name = ? AND Number = ? AND Dates = ?"
+	srv.Db.Exec(sqlStr1, NewObjectStruct.Group, NewObjectStruct.Number, NewObjectStruct.Dates)
 	sqlStr := "INSERT INTO Timesheet (Subject_item, Classroom, Tutor, Type, Group_name, Dates, Number) VALUES (?, ?, ?, ?, ?, ?, ?)"
 	_, err := srv.Db.Exec(sqlStr, NewObjectStruct.Subject, NewObjectStruct.Auditorium, NewObjectStruct.Tutor, NewObjectStruct.Type, NewObjectStruct.Group, NewObjectStruct.Dates, NewObjectStruct.Number)
+
 	return err
 }
 func InsertionToDb(SheduleTable []*ObjectPattern) error {
@@ -40,4 +47,12 @@ func InsertionToDb(SheduleTable []*ObjectPattern) error {
 		err = сreateObjectOfShedule(i)
 	}
 	return err
+}
+
+func DatesForDaysOfWeek() []*ProtoApi.DateTime {
+	ArrayOfDates := []*ProtoApi.DateTime{}
+	for i := 0; i < 7; i++ {
+		ArrayOfDates = append(ArrayOfDates, &ProtoApi.DateTime{Year: int32(now.BeginningOfWeek().Year()), Month: int32(now.BeginningOfWeek().Month()), Day: int32(now.BeginningOfWeek().Day()) + 1})
+	}
+	return ArrayOfDates
 }

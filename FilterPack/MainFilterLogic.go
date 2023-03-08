@@ -18,13 +18,13 @@ type ArrayStructString struct {
 }
 
 func LowFilterFunction(Filter string, value int32) []*SetInfo.ObjectPattern {
+	now.WeekStartDay = time.Monday
 	var AllObjectsFromDb []*SetInfo.ObjectPattern
 	BeginningOfThisWeek := now.BeginningOfWeek()
 	EndingOfThisWeek := now.EndOfWeek()
 	if Filter == "0" && value == 0 {
 		query := "SELECT * FROM Timesheet WHERE (Dates < ? AND Dates > ?)"
-		err := srv.Db.Select(&AllObjectsFromDb, query, EndingOfThisWeek, BeginningOfThisWeek)
-		fmt.Println(err)
+		srv.Db.Select(&AllObjectsFromDb, query, EndingOfThisWeek, BeginningOfThisWeek)
 	} else {
 		query := "SELECT * FROM Timesheet WHERE (? = ?)"
 		srv.Db.Select(&AllObjectsFromDb, query)
@@ -33,6 +33,7 @@ func LowFilterFunction(Filter string, value int32) []*SetInfo.ObjectPattern {
 }
 
 func FilterFunction(Filter string, value int32) []*SetInfo.StringObjectPattern {
+	now.WeekStartDay = time.Monday
 	var AllObjectsFromDb []*SetInfo.StringObjectPattern
 	BeginningOfThisWeek := now.BeginningOfWeek().Format("20060102")
 	EndingOfThisWeek := now.EndOfWeek().Format("20060102")
@@ -41,8 +42,24 @@ func FilterFunction(Filter string, value int32) []*SetInfo.StringObjectPattern {
 		srv.Db.Select(&AllObjectsFromDb, query, EndingOfThisWeek, BeginningOfThisWeek)
 	} else {
 		query := "SELECT Timesheet.Id, S.Subject_item, C.Classroom, Gn.Group_name, T.SecondName, T.FirstName, T.LastName, T2.Type, Number, Timesheet.Dates\nFROM Timesheet JOIN Subjects S on S.Id = Timesheet.Subject_item JOIN Classrooms C on C.Id = Timesheet.Classroom JOIN Groups_name Gn on Gn.Id = Timesheet.Group_name JOIN Tutors T on T.Id = Timesheet.Tutor JOIN Types T2 on T2.Id = Timesheet.Type WHERE (? = ?)"
-		err := srv.Db.Select(&AllObjectsFromDb, query, Filter, value)
-		fmt.Println(err)
+		srv.Db.Select(&AllObjectsFromDb, query, Filter, value)
+	}
+	return AllObjectsFromDb
+}
+
+func FilterFunctionWithGroup(Filter string, value int32) []*SetInfo.StringObjectPattern {
+	now.WeekStartDay = time.Monday
+	var AllObjectsFromDb []*SetInfo.StringObjectPattern
+	BeginningOfThisWeek := now.BeginningOfWeek().Format("20060102")
+	EndingOfThisWeek := now.EndOfWeek().Format("20060102")
+	fmt.Println(BeginningOfThisWeek)
+	fmt.Println(EndingOfThisWeek)
+	if Filter != "0" && value == 0 {
+		query := "SELECT Timesheet.Id, S.Subject_item, C.Classroom, Gn.Group_name, T.SecondName, T.FirstName, T.LastName, T2.Type, Number, Timesheet.Dates\nFROM Timesheet JOIN Subjects S on S.Id = Timesheet.Subject_item JOIN Classrooms C on C.Id = Timesheet.Classroom JOIN Groups_name Gn on Gn.Id = Timesheet.Group_name JOIN Tutors T on T.Id = Timesheet.Tutor JOIN Types T2 on T2.Id = Timesheet.Type WHERE Dates >= ? AND Dates <= ?  AND Gn.Group_name = ?"
+		srv.Db.Select(&AllObjectsFromDb, query, BeginningOfThisWeek, EndingOfThisWeek, Filter)
+	}
+	for _, i := range AllObjectsFromDb {
+		fmt.Println(i)
 	}
 	return AllObjectsFromDb
 }
@@ -51,21 +68,24 @@ func GetDaysOfWeekForStrings(AllObjectsFromDb []*SetInfo.StringObjectPattern) [7
 	var SheduleTableByDayOfWeek [7]ArrayStructString
 	for _, i := range AllObjectsFromDb {
 		DayOfWeekByDateFromDb := i.Dates.Weekday()
+		fmt.Println(DayOfWeekByDateFromDb)
 		switch DayOfWeekByDateFromDb {
-		case 1:
+		case time.Monday:
 			SheduleTableByDayOfWeek[0].SubjectsOfThisDay = append(SheduleTableByDayOfWeek[0].SubjectsOfThisDay, *i)
-		case 2:
+		case time.Tuesday:
 			SheduleTableByDayOfWeek[1].SubjectsOfThisDay = append(SheduleTableByDayOfWeek[1].SubjectsOfThisDay, *i)
-		case 3:
+		case time.Wednesday:
 			SheduleTableByDayOfWeek[2].SubjectsOfThisDay = append(SheduleTableByDayOfWeek[2].SubjectsOfThisDay, *i)
-		case 4:
+		case time.Thursday:
 			SheduleTableByDayOfWeek[3].SubjectsOfThisDay = append(SheduleTableByDayOfWeek[3].SubjectsOfThisDay, *i)
-		case 5:
+		case time.Friday:
 			SheduleTableByDayOfWeek[4].SubjectsOfThisDay = append(SheduleTableByDayOfWeek[4].SubjectsOfThisDay, *i)
-		case 6:
+		case time.Saturday:
 			SheduleTableByDayOfWeek[5].SubjectsOfThisDay = append(SheduleTableByDayOfWeek[5].SubjectsOfThisDay, *i)
-		case 7:
+			fmt.Println("This 6")
+		case time.Sunday:
 			SheduleTableByDayOfWeek[6].SubjectsOfThisDay = append(SheduleTableByDayOfWeek[6].SubjectsOfThisDay, *i)
+			fmt.Println("This 7")
 		}
 	}
 	return SheduleTableByDayOfWeek
@@ -96,6 +116,7 @@ func GetDaysOfWeek(AllObjectsFromDb []*SetInfo.ObjectPattern) [7]ArrayStruct {
 }
 
 func AdditionSubjectToEachDay(Week [7]ArrayStruct) [7]ArrayStruct {
+	now.WeekStartDay = time.Monday
 	var newNullObjects SetInfo.ObjectPattern
 	newNullObjects.Type = -1
 	newNullObjects.Tutor = -1
@@ -126,6 +147,7 @@ func AdditionSubjectToEachDay(Week [7]ArrayStruct) [7]ArrayStruct {
 }
 
 func AdditionSubjectToEachDayForStrings(Week [7]ArrayStructString) [7]ArrayStructString {
+	now.WeekStartDay = time.Monday
 	var newNullObjects SetInfo.StringObjectPattern
 	newNullObjects.Type = "-1"
 	newNullObjects.LastName = "-1"
@@ -134,9 +156,11 @@ func AdditionSubjectToEachDayForStrings(Week [7]ArrayStructString) [7]ArrayStruc
 	newNullObjects.Subject = "-1"
 	newNullObjects.Auditorium = "-1"
 	newNullObjects.Group = "-1"
-	newNullObjects.Dates = time.Date(0001, 1, 1, 0, 0, 0, 0, time.UTC)
+	//newNullObjects.Dates = time.Date(0001, 1, 1, 0, 0, 0, 0, time.UTC)
 	newNullObjects.Id = -1
 	for i := 0; i < 7; i++ {
+		newNullObjects.Dates = time.Date(now.BeginningOfWeek().Year(), time.Month(int(now.BeginningOfWeek().Month())), now.BeginningOfWeek().Day()+i, 0, 0, 0, 0, time.UTC)
+		fmt.Println(newNullObjects.Dates, " ", i)
 		var MissingSubjectsMap = make(map[int32]int)
 		for k := 0; k < 8; k++ {
 			MissingSubjectsMap[int32(k)] = 0

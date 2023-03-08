@@ -13,6 +13,7 @@ import (
 func main() {
 	srv.InitDB()
 	LaunchServer()
+
 	//FilterPack.LowFilterFunction("0", 0)
 	//var q = FilterPack.GetDaysOfWeek(FilterPack.LowFilterFunction("0", 0))
 	//var q [7]FilterPack.ArrayStructString
