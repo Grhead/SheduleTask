@@ -76,10 +76,8 @@ func GetDaysOfWeekForStrings(AllObjectsFromDb []*SetInfo.StringObjectPattern) [7
 			SheduleTableByDayOfWeek[4].SubjectsOfThisDay = append(SheduleTableByDayOfWeek[4].SubjectsOfThisDay, *i)
 		case time.Saturday:
 			SheduleTableByDayOfWeek[5].SubjectsOfThisDay = append(SheduleTableByDayOfWeek[5].SubjectsOfThisDay, *i)
-			fmt.Println("This 6")
 		case time.Sunday:
 			SheduleTableByDayOfWeek[6].SubjectsOfThisDay = append(SheduleTableByDayOfWeek[6].SubjectsOfThisDay, *i)
-			fmt.Println("This 7")
 		}
 	}
 	return SheduleTableByDayOfWeek
@@ -150,7 +148,6 @@ func AdditionSubjectToEachDayForStrings(Week [7]ArrayStructString) [7]ArrayStruc
 	newNullObjects.Subject = "-1"
 	newNullObjects.Auditorium = "-1"
 	newNullObjects.Group = "-1"
-	//newNullObjects.Dates = time.Date(0001, 1, 1, 0, 0, 0, 0, time.UTC)
 	newNullObjects.Id = -1
 	for i := 0; i < 7; i++ {
 		newNullObjects.Dates = time.Date(now.BeginningOfWeek().Year(), time.Month(int(now.BeginningOfWeek().Month())), now.BeginningOfWeek().Day()+i, 0, 0, 0, 0, time.UTC)
