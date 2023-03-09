@@ -151,7 +151,6 @@ func AdditionSubjectToEachDayForStrings(Week [7]ArrayStructString) [7]ArrayStruc
 	newNullObjects.Id = -1
 	for i := 0; i < 7; i++ {
 		newNullObjects.Dates = time.Date(now.BeginningOfWeek().Year(), time.Month(int(now.BeginningOfWeek().Month())), now.BeginningOfWeek().Day()+i, 0, 0, 0, 0, time.UTC)
-		fmt.Println(newNullObjects.Dates, " ", i)
 		var MissingSubjectsMap = make(map[int32]int)
 		for k := 0; k < 8; k++ {
 			MissingSubjectsMap[int32(k)] = 0
