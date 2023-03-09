@@ -115,9 +115,9 @@ func (G GRPCServer) AddShedule(ctx context.Context, SheduleArray *ProtoApi.AllSh
 
 func (G GRPCServer) CheckAuth(ctx context.Context, AuthCtx *ProtoApi.AuthorizationContext) (*ProtoApi.AuthorizationResult, error) {
 	fmt.Println(AuthCtx.Login, " ", AuthCtx.Pass)
-	DefStruct := AuthPack.Authorization(AuthCtx.Login, AuthCtx.Pass)
-	fmt.Println(DefStruct)
-	return &ProtoApi.AuthorizationResult{IsAccept: strconv.FormatBool(DefStruct)}, nil
+	DefStruct, RoleResult := AuthPack.Authorization(AuthCtx.Login, AuthCtx.Pass)
+	fmt.Println(DefStruct, RoleResult)
+	return &ProtoApi.AuthorizationResult{IsAccept: strconv.FormatBool(DefStruct), Role: RoleResult}, nil
 }
 
 func (G GRPCServer) GetSheduleFromDbForTutor(ctx context.Context, Filter *ProtoApi.Filter) (*ProtoApi.SheduleArrayByWeek, error) {

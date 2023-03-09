@@ -23,6 +23,7 @@ message AuthorizationContext{
 
 message AuthorizationResult{
   string IsAccept = 1;
+  int32 Role = 2;
 }
 
 message Filter{
