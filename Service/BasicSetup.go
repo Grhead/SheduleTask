@@ -16,7 +16,7 @@ func InitDB() (err error) {
 		fmt.Printf("connect DB failed, err:%v\n", err)
 		return
 	}
-	Db.SetMaxOpenConns(20)
-	Db.SetMaxIdleConns(10)
+	Db.SetMaxOpenConns(50)
+	Db.SetMaxIdleConns(50)
 	return
 }

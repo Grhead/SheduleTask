@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"google.golang.org/grpc"
 	"net"
+	"timesheet/AuthPack"
 	"timesheet/ProtoApi"
 	"timesheet/Server"
 	srv "timesheet/Service"
@@ -10,12 +12,13 @@ import (
 
 func main() {
 	srv.InitDB()
+	fmt.Println(AuthPack.Authorization("user", "user"))
 	LaunchServer()
 }
 func LaunchServer() {
 	s := grpc.NewServer()
 	srvi := &Server.GRPCServer{}
-	l, _ := net.Listen("tcp", ":8787")
 	ProtoApi.RegisterSheduleServiceServer(s, srvi)
+	l, _ := net.Listen("tcp", ":8787")
 	s.Serve(l)
 }
