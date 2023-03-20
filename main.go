@@ -1,10 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"google.golang.org/grpc"
 	"net"
-	"timesheet/AuthPack"
 	"timesheet/ProtoApi"
 	"timesheet/Server"
 	srv "timesheet/Service"
@@ -12,7 +10,6 @@ import (
 
 func main() {
 	srv.InitDB()
-	fmt.Println(AuthPack.Authorization("user", "user"))
 	LaunchServer()
 }
 func LaunchServer() {
